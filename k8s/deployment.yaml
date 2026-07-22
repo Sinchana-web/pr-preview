@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pr-preview-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pr-preview-app
+  template:
+    metadata:
+      labels:
+        app: pr-preview-app
+    spec:
+      containers:
+      - name: pr-preview-app
+        image: pr-preview-app:v1
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Never
