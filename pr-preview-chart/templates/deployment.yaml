@@ -14,7 +14,9 @@ spec:
     spec:
       containers:
       - name: pr-preview-app
-        image: pr-preview-app:v1
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - containerPort: 3000
         imagePullPolicy: Never
+        
+imagePullPolicy: {{ .Values.image.pullPolicy }}
