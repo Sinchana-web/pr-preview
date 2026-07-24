@@ -18,10 +18,10 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -31,16 +31,28 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker image
+      - name: Build Docker Image
         run: |
-          docker build -t $ECR_REPOSITORY:${{ github.sha }} ./app
+          docker build \
+            -t $ECR_REPOSITORY:${{ github.sha }} \
+            ./app
 
-      - name: Tag image
+      - name: Tag Docker Image
         run: |
-          docker tag $ECR_REPOSITORY:${{ github.sha }} \
+          docker tag \
+          $ECR_REPOSITORY:${{ github.sha }} \
           $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
 
-      - name: Push image
+      - name: Push Docker Image
         run: |
           docker push \
           $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
+
+      - name: Display Image URI
+        run: |
+          echo ""
+          echo "========================================="
+          echo "IMAGE DEPLOYED TO AMAZON ECR"
+          echo "========================================="
+          echo "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}"
+          echo "========================================="

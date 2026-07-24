@@ -1,19 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
-  name: pr-preview-app
+  name: {{ .Release.Name }}
+
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
+
   selector:
     matchLabels:
-      app: pr-preview-app
+      app: {{ .Release.Name }}
+
   template:
     metadata:
       labels:
-        app: pr-preview-app
+        app: {{ .Release.Name }}
+
     spec:
-      containers:
-        - name: pr-preview-app
+      imagePullSecrets:
+        - name: ecr-secret
+
+            containers:
+        - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
