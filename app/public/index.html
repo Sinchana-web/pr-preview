@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cloud-native PR preview environment dashboard">
+  <meta name="theme-color" content="#0b1220">
+  <title>PR Preview Platform</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236366f1'/%3E%3Cpath d='M10 16.5l4.5 4.5L23 12' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="7" fill="#6366f1"/>
+        <path d="M10 16.5l4.5 4.5L23 12" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-name">PR Preview Platform</span>
+      <span class="chip" id="env-chip">loading…</span>
+    </div>
+    <div class="topbar-right">
+      <span class="live" id="live-status">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="live-label">Connecting</span>
+      </span>
+      <span class="muted" id="last-updated" title="Last status refresh"></span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Pull Request <span id="hero-pr" class="accent">#—</span> is live</h1>
+      <p class="subtitle">An isolated preview environment, built and deployed automatically by the CI/CD pipeline.</p>
+    </section>
+
+    <section class="stats" aria-label="Environment status">
+      <article class="card">
+        <span class="card-label">Pull Request</span>
+        <span class="card-value mono" id="stat-pr">—</span>
+        <span class="card-hint">Source branch preview</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Deployed version</span>
+        <span class="card-value mono" id="stat-version">—</span>
+        <span class="card-hint">Image tag / build</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Uptime</span>
+        <span class="card-value mono" id="stat-uptime">—</span>
+        <span class="card-hint">Since process start</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Hostname</span>
+        <span class="card-value mono truncate" id="stat-hostname" title="">—</span>
+        <span class="card-hint">Pod / container name</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Namespace</span>
+        <span class="card-value mono" id="stat-namespace">—</span>
+        <span class="card-hint">Kubernetes namespace</span>
+      </article>
+      <article class="card">
+        <span class="card-label">Runtime</span>
+        <span class="card-value mono" id="stat-runtime">—</span>
+        <span class="card-hint">Node.js version</span>
+      </article>
+    </section>
+
+    <section class="panel" aria-label="CI/CD pipeline">
+      <div class="panel-head">
+        <h2>Deployment pipeline</h2>
+        <span class="badge badge-ok" id="pipeline-badge">completed</span>
+      </div>
+      <ol class="pipeline">
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">GitHub Actions</span><span class="step-desc">Build triggered</span></li>
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">Docker</span><span class="step-desc">Image built</span></li>
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">Amazon ECR</span><span class="step-desc">Image pushed</span></li>
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">Helm</span><span class="step-desc">Release applied</span></li>
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">Kubernetes</span><span class="step-desc">Pods running</span></li>
+        <li class="step done"><span class="step-dot">✓</span><span class="step-name">ngrok</span><span class="step-desc">Public URL</span></li>
+      </ol>
+    </section>
+
+    <section class="split">
+      <div class="panel">
+        <div class="panel-head"><h2>Environment</h2></div>
+        <dl class="details">
+          <div class="details-row"><dt>Status</dt><dd><span class="badge badge-ok" id="detail-status">—</span></dd></div>
+          <div class="details-row"><dt>Service</dt><dd class="mono">pr-preview-service:80 → 3000</dd></div>
+          <div class="details-row"><dt>Ingress host</dt><dd class="mono">preview.local</dd></div>
+          <div class="details-row"><dt>Started</dt><dd id="detail-started">—</dd></div>
+          <div class="details-row"><dt>Server time</dt><dd id="detail-time">—</dd></div>
+        </dl>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Endpoints</h2></div>
+        <ul class="endpoints">
+          <li><a href="/health">/health</a><span class="muted">Liveness probe</span></li>
+          <li><a href="/api/status">/api/status</a><span class="muted">Live status JSON</span></li>
+          <li><span class="mono muted">pr-preview-service:80</span><span class="muted">Cluster service</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Cloud-Native PR Preview Platform</span>
+    <span class="muted" id="footer-meta">—</span>
+  </footer>
+
+  <noscript><p class="noscript">JavaScript is disabled — the environment is running, but live status is unavailable. API: <a href="/api/status">/api/status</a></p></noscript>
+</body>
+</html>
